@@ -22,7 +22,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
 			_inputArgs = gameplayInputArgs;
 
-			//GameplayContextRegistrations.Process(_container, _inputArgs);
+			GameplayContextRegistrations.Process(_container, _inputArgs);
 		}
 
 		public override IEnumerator Initialize()

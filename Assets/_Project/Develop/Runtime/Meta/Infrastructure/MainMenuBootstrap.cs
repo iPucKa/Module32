@@ -1,4 +1,5 @@
-﻿using Assets._Project.Develop.Runtime.Infrastructure;
+﻿using Assets._Project.Develop.Runtime.Gameplay.Infrastructure;
+using Assets._Project.Develop.Runtime.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
@@ -15,7 +16,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 		{
 			_container = container;
 
-			//MainMenuContextRegistrations.Process(_container);
+			MainMenuContextRegistrations.Process(_container);
 		}
 
 		public override IEnumerator Initialize()
@@ -36,7 +37,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 				SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
 
 				ICoroutinesPerformer coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
-				coroutinesPerformer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.Gameplay/*, new GameplayInputArgs(2)*/));
+				coroutinesPerformer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.Gameplay, new GameplayInputArgs(2)));
 			}
 		}
 	}
