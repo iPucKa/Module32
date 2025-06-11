@@ -7,7 +7,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 	{
 		public static void Process(DIContainer container, GameplayInputArgs args)
 		{
-			Debug.Log("Процесс регистрации сервисов на сцене геймплея");
+			Debug.Log("Процесс регистрации сервисов на сцене геймплея");			
 		}
 	}
 }

@@ -1,14 +1,17 @@
 ﻿using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
+using System.Collections.Generic;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 {
 	public class GameplayInputArgs : IInputSceneArgs
 	{
-		public GameplayInputArgs(int levelNumber)
+		private List<char> _symbolsForGenerating;
+
+		public GameplayInputArgs(List<char> symbols)
 		{
-			LevelNumber = levelNumber;
+			_symbolsForGenerating = new List<char> (symbols);
 		}
 
-		public int LevelNumber { get; }
+		public List<char> Symbols => _symbolsForGenerating;
 	}
 }

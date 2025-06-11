@@ -1,6 +1,7 @@
 ﻿using Assets._Project.Develop.Runtime.Gameplay.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
 using System.Collections;
@@ -23,7 +24,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 		{
 			Debug.Log("Инициализация сцены меню");
 			yield break;
-		}		
+		}
 
 		public override void Run()
 		{
@@ -32,13 +33,30 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 
 		private void Update()
 		{
-			if (Input.GetKeyDown(KeyCode.F))
+			if (Input.GetKeyUp(KeyCode.Alpha1))
 			{
-				SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
+				IConfig config = _container.Resolve<ConfigsProviderService>().GetConfig<NumberConfig>();
 
-				ICoroutinesPerformer coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
-				coroutinesPerformer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.Gameplay, new GameplayInputArgs(2)));
+				Debug.Log("Принят файл настроек генерации цифр");
+				SetupGameplayMode(config);
+				return;
 			}
+
+			if (Input.GetKeyUp(KeyCode.Alpha2))
+			{
+				IConfig config = _container.Resolve<ConfigsProviderService>().GetConfig<CharConfig>();
+
+				Debug.Log("Принят файл настроек генерации букв");
+				SetupGameplayMode(config);
+				return;
+			}
+		}
+
+		private void SetupGameplayMode(IConfig config)
+		{
+			SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
+			
+			_container.Resolve<ICoroutinesPerformer>().StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.Gameplay, new GameplayInputArgs(config.CharsForGenerate)));
 		}
 	}
 }

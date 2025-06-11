@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b5d1df4ea8412e4c9ebbbd2b8f1c820, type: 3}
   m_Name: NumberConfig
   m_EditorClassIdentifier: 
-  <NumbersForGenerate>k__BackingField: 0100000002000000030000000400000005000000
+  <CharsForGenerate>k__BackingField: 3100320033003400350036003700380039003000
