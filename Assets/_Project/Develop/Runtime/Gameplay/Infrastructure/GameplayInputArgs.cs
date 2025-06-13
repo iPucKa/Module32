@@ -1,17 +1,16 @@
 ﻿using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
-using System.Collections.Generic;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 {
 	public class GameplayInputArgs : IInputSceneArgs
 	{
-		private List<char> _symbolsForGenerating;
+		private readonly SymbolInputMode _mode;
 
-		public GameplayInputArgs(List<char> symbols)
+		public GameplayInputArgs(SymbolInputMode mode)
 		{
-			_symbolsForGenerating = new List<char> (symbols);
+			_mode = mode;
 		}
 
-		public List<char> Symbols => _symbolsForGenerating;
+		public SymbolInputMode Mode => _mode;
 	}
 }

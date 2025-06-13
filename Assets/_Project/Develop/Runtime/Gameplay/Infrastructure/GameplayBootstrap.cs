@@ -1,8 +1,6 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
-using Assets._Project.Develop.Runtime.Infrastructure.GameRules;
-using Assets._Project.Develop.Runtime.Meta.Infrastructure;
-using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
+using Assets._Project.Develop.Runtime.Gameplay.GameModeManagement;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
 using Assets._Project.Develop.Runtime.Gameplay.PlayerInput;
 using System;
@@ -16,10 +14,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 		[SerializeField] private PlayerInputHandler _playerInputHandler;
 
 		private DIContainer _container;
+		private GameplayCycle _gameplayCycle;
 		private GameplayInputArgs _inputArgs;
-
-		private IRule _gameRule;
-		private GameMode _gameMode;
 
 		public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
 		{
@@ -33,57 +29,23 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
 		public override IEnumerator Initialize()
 		{
-			_gameRule = new MatchSymbolsRule(_inputArgs.Symbols, _playerInputHandler);
-			_gameMode = new GameMode(_gameRule);
+			_gameplayCycle = new GameplayCycle(_container, _playerInputHandler, _inputArgs);
 
-			_gameMode.Win += OnGameModeWin;
-			_gameMode.Defeat += OnGameModeDefeat;
+			yield return _gameplayCycle.Launch();
 
 			Debug.Log("Инициализация геймплейной сцены");
-			yield break;
 		}
 
 		public override void Run()
 		{
 			Debug.Log("Старт геймплейной сцены");
 
-			_gameRule.Start();
-			_gameMode.Start();
+			_gameplayCycle.Start();
 		}
 
-		private void OnGameModeDefeat()
+		private void OnDestroy()
 		{
-			OnGameModeEnded();
-			Debug.Log("ПОРАЖЕНИЕ");			
-			_container.Resolve<ICoroutinesPerformer>().StartPerform(ResetProcess(Scenes.Gameplay));			
-		}
-
-		private void OnGameModeWin()
-		{
-			OnGameModeEnded();
-			Debug.Log("ПОБЕДА");
-			_container.Resolve<ICoroutinesPerformer>().StartPerform(ResetProcess(Scenes.MainMenu));
-		}
-
-		private void OnGameModeEnded()
-		{
-			if (_gameMode != null)
-			{
-				_gameMode.Win -= OnGameModeWin;
-				_gameMode.Defeat -= OnGameModeDefeat;
-			}
-
-			if (_gameMode != null) 
-				_gameRule.Dispose();
-		}
-
-		private IEnumerator ResetProcess(string sceneName)
-		{
-			yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
-
-			SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
-
-			_container.Resolve<ICoroutinesPerformer>().StartPerform(sceneSwitcherService.ProcessSwitchTo(sceneName, new GameplayInputArgs(_inputArgs.Symbols)));
+			_gameplayCycle?.Dispose();
 		}
 	}
 }

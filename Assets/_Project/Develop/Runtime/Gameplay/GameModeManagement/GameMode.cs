@@ -1,14 +1,14 @@
-﻿using Assets._Project.Develop.Runtime.Infrastructure.GameRules;
+﻿using Assets._Project.Develop.Runtime.Gameplay.GameRules;
 using System;
 
-namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
+namespace Assets._Project.Develop.Runtime.Gameplay.GameModeManagement
 {
 	public class GameMode
 	{
 		public event Action Win;
 		public event Action Defeat;
 
-		private IRule _gameRule;
+		private readonly IRule _gameRule;
 
 		public GameMode(IRule condition)
 		{

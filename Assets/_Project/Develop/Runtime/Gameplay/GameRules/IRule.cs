@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Assets._Project.Develop.Runtime.Infrastructure.GameRules
+namespace Assets._Project.Develop.Runtime.Gameplay.GameRules
 {
 	public interface IRule : IDisposable
 	{
